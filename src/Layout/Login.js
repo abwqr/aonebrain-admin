@@ -2,26 +2,46 @@ import React, {useState} from 'react'
 import {connect} from 'react-redux';
 import {setAlert} from '../actions/alert';
 import { setLogin } from '../actions/login';
+import axios from "axios";
+import PropTypes from 'prop-types'
 
 const Login = (props) => {
-    var [username, setUsername] = useState('')
-    var [password, setPassword] = useState('')
+    var [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    })
+
+    const {username, password} = formData
 
     const clickHandler = async e => {
-        props.setAlert("ALERT")
-        props.setLogin(username, password)
         e.preventDefault()
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const body = JSON.stringify(formData);
+            const res = await axios.post('http://aonebrain.aim-less.com/api/token', body, config);
+            // const res = await axios.post('https://jsonplaceholder.typicode.com/users', body);
+
+            console.log(username, password, res);
+            props.setAlert("Logged in");
+        } catch (err) {
+
+            props.setAlert("Log in failed");
+            // console.log(err.response.data);
+
+        }
     };
 
+    const onChange = e => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+        console.log(e.target.value)
+    };
 
-    const handleUsername = async e => {
-        setUsername(e.target.value)
-        e.preventDefault()
-    }
-
-    const handlePassword = async e => {
-        setPassword(e.target.value)
-        e.preventDefault()
+    Login.propTypes = {
+        setAlert: PropTypes.func.isRequired
     }
 
     return(
@@ -36,12 +56,14 @@ const Login = (props) => {
                         <form action="index.html" className="login-form">
                             <div className="form-group">
                                 <label>Username</label>
-                                <input type="text" placeholder="Enter username" className="form-control" onChange={handleUsername}/>
+                                <input type="text" placeholder="Enter username" name="username" value={username} onChange={e => onChange(e)}
+                                   className="form-control" required/>
                                 <i className="far fa-envelope"></i>
                             </div>
                             <div className="form-group">
                                 <label>Password</label>
-                                <input type="text" placeholder="Enter password" className="form-control"  onChange={handlePassword}/>
+                                <input type="text" placeholder="Enter password" name="password" value={password} onChange={e => onChange(e)}
+                                   className="form-control" required/>
                                 <i className="fas fa-lock"></i>
                             </div>
                             <div className="form-group d-flex align-items-center justify-content-between">
@@ -71,5 +93,8 @@ const Login = (props) => {
             </div>
         </>
     )
+
+
+    
 }
 export default connect(null, {setAlert, setLogin}) (Login);
