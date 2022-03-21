@@ -4,7 +4,9 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Login from './Layout/Login';
 import Alert from "./Layout/Alert";
+import SignUp from "./Layout/SignUp";
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default function App() {
   return(
     <Provider store={store}>
@@ -13,7 +15,8 @@ export default function App() {
         <section className = "container">
           <Alert/>
             <Routes>
-              <Route path="/" element={<Login/>}/> 
+              <Route path="/login" element={<Login/>}/> 
+              <Route path="/signup" element={<SignUp/>}/>
             </Routes>
           </section>
       </Fragment>
