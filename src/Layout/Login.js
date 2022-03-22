@@ -3,9 +3,12 @@ import {connect} from 'react-redux';
 import {setAlert} from '../actions/alert';
 import { setLogin } from '../actions/login';
 import axios from "axios";
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+// import ForgotPassword from './ForgotPassword'
 
 const Login = (props) => {
+    localStorage.removeItem("username")
+    localStorage.removeItem("password")
     var [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -68,6 +71,8 @@ const Login = (props) => {
         setAlert: PropTypes.func.isRequired
     }
 
+
+    
     return(
         <>
             <div id="preloader"></div>
@@ -95,7 +100,7 @@ const Login = (props) => {
                                     <input type="checkbox" className="form-check-input" id="remember-me" onClick={(e) => {handleRemember(e)}}/>
                                     <label for="remember-me" className="form-check-label">Remember Me</label>
                                 </div>
-                                <a href="#" className="forgot-btn">Forgot Password?</a>
+                                <a href="ForgotPassword" className="forgot-btn">Forgot Password?</a>
                             </div>
                             <div className="form-group">
                                 <button type="submit" className="login-btn" >Login</button>
@@ -112,13 +117,13 @@ const Login = (props) => {
                             </ul>
                         </div> */}
                     </div>
-                    <div className="sign-up">Don't have an account ? <a href="#">Signup now!</a></div>
+                    <div className="sign-up">Don't have an account ? <a href="SignUp">Signup now!</a></div>
                 </div>
             </div>
         </>
     )
 
-
+ 
     
 }
 export default connect(null, {setAlert, setLogin}) (Login);

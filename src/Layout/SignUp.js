@@ -1,27 +1,31 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux';
 import {setAlert} from '../actions/alert';
-// import { setLogin } from '../actions/login';
+// import logo2 from '../../public/img/logo2.png';
 import axios from "axios";
 import PropTypes from 'prop-types'
 
 const SignUp = (props) => {
+
+    function hasNumber(myString) {
+        return /\d/.test(myString);
+      }
+
     var [formData, setFormData] = useState({
-        username: ' ',
+        username: '',
         email: '',
-        // firstName: '',
-        // lastName: '',
-        password1: ' ',
-        password2: ' '
+        password1: '',
+        password2: '',
+        type: 'School'
     })
 
-    const {username, email, password1, password2} = formData
+    const {username, email, password1, password2, type} = formData
 
     const clickHandler = async e => {
         e.preventDefault()
         console.log(formData)
         
-        if(isNaN(password1) && !isNaN(password1) && password1.length >= 8)
+        if(isNaN(password1) && hasNumber(password1) && password1.length >= 8)
         {
             if(password1 !== password2)
             {
@@ -53,8 +57,8 @@ const SignUp = (props) => {
         else
         {
             
-            if (!isNaN(password1)) props.setAlert("Password should contain a number", "danger") 
-            if (isNaN(password1))  props.setAlert("Password should contain an alphabet", "danger")
+            if (!isNaN(password1)) props.setAlert("Password should contain an alphabet", "danger") 
+            if (!hasNumber(password1))  props.setAlert("Password should contain a number", "danger")
             if (password1.length < 8) props.setAlert("Password length should have at least 8 characters", "danger")
         }
 
@@ -64,7 +68,7 @@ const SignUp = (props) => {
 
     const onChange = e => {
         setFormData({...formData, [e.target.name]: e.target.value});
-          localStorage.setItem( [e.target.name],  e.target.value);
+        
           console.log(e.target.value)
     };
 
@@ -78,50 +82,36 @@ const SignUp = (props) => {
             <div className="login-page-wrap">
                 <div className="login-page-content">
                     <div className="login-box">
-                        <div className="item-logo">
-                            <img src="src\Styles\img\logo2.png" alt="logo"/>
+                        <div className="item-logo"> 
+                            <img src="src/img/logo2.png" alt="logo"/>
                         </div>
                         <form action="index.html" className="login-form"  onSubmit={clickHandler}>
                      
                            <div className="form-group">
                                 <label>Username</label>
-                                <input type="text" placeholder="Enter username" name="username" value={localStorage.getItem('username')} onChange={e => onChange(e)}
+                                <input type="text" placeholder="Enter username" name="username" value={username} onChange={e => onChange(e)}
                                    className="form-control" required/>
                                 <i className="far fa-envelope"></i>
                             </div>
 
                            <div className="form-group">
                                 <label>Email</label>
-                                <input type="email" placeholder="Enter Email" name="email" value={localStorage.getItem('email')} onChange={e => onChange(e)}
+                                <input type="email" placeholder="Enter Email" name="email" value={email} onChange={e => onChange(e)}
                                    className="form-control" required/>
                                 <i className="far fa-envelope"></i>
                             </div>
-
-                            {/* <div className="form-group">
-                                <label>First Name</label>
-                                <input type="text" placeholder="Enter First Name" name="firstName" value={localStorage.getItem('firstName')} onChange={e => onChange(e)}
-                                   className="form-control" required/>
-                                <i className="far fa-envelope"></i>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Last Name</label>
-                                <input type="text" placeholder="Enter Last Name" name="lastName" value={localStorage.getItem('lastName')} onChange={e => onChange(e)}
-                                   className="form-control" required/>
-                                <i className="far fa-envelope"></i>
-                            </div> */}
 
                             
                             <div className="form-group">
                                 <label>Password</label>
-                                <input type="password" placeholder="Enter password" name="password1" value={localStorage.getItem('password1')} onChange={e => onChange(e)}
+                                <input type="password" placeholder="Enter password" name="password1" value={password1} onChange={e => onChange(e)}
                                    className="form-control" required/>
                                 <i className="fas fa-lock"></i>
                             </div>
 
                             <div className="form-group">
                                 <label>Re-enter Password</label>
-                                <input type="password" placeholder="Re-enter password" name="password2" value={localStorage.getItem('password2')} onChange={e => onChange(e)}
+                                <input type="password" placeholder="Re-enter password" name="password2" value={password2} onChange={e => onChange(e)}
                                    className="form-control" required/>
                                 <i className="fas fa-lock"></i>
                             </div>

@@ -5,6 +5,8 @@ import store from './store';
 import Login from './Layout/Login';
 import Alert from "./Layout/Alert";
 import SignUp from "./Layout/SignUp";
+import ForgotPassword from "./Layout/ForgotPassword";
+// import jQuery from 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
@@ -17,6 +19,7 @@ export default function App() {
             <Routes>
               <Route path="/login" element={<Login/>}/> 
               <Route path="/signup" element={<SignUp/>}/>
+              <Route path="/forgotpassword" element = {<ForgotPassword/>}></Route>
             </Routes>
           </section>
       </Fragment>
