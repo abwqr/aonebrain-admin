@@ -48,8 +48,43 @@ const SignUp = (props) => {
 
                 } catch (err) {
 
-                    props.setAlert("Sign up failed", "danger");
+                    const error = {email: 'A user is already registered with this e-mail address.',
+                                   username: 'A user with that username already exists.',
+                                   status: '400' 
+                                  }
+                    
+                    
 
+                    const errorReturned = err.response.data
+
+
+                    console.log((JSON.stringify(Object.values(errorReturned)[2])))
+                    
+                    if(JSON.stringify(JSON.stringify(Object.values(errorReturned)[2])) === JSON.stringify(error.status)){
+                      
+                        if((JSON.stringify(Object.values(errorReturned)[1][0]) === JSON.stringify(error.email)))
+                        {
+                            // console.log(typeof(JSON.stringify(err.response.data)))
+                            props.setAlert('A user is already registered with this e-mail address.', "danger");
+                        }
+                       
+                    if(JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.username))
+                        props.setAlert('A user with that username already exists.', "danger");  
+                    }
+                    
+                    else if(JSON.stringify(JSON.stringify(Object.values(errorReturned)[1])) === JSON.stringify(error.status)){
+                      
+                        if((JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.email)))
+                        {
+                            // console.log(typeof(JSON.stringify(err.response.data)))
+                            props.setAlert('A user is already registered with this e-mail address.', "danger");
+                        }
+                       
+                    if(JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.username))
+                        props.setAlert('A user with that username already exists.', "danger");  
+                    }
+
+                    
                 }
             }
         }    
