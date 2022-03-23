@@ -80,7 +80,7 @@ const Login = (props) => {
                 <div className="login-page-content">
                     <div className="login-box">
                         <div className="item-logo">
-                            <img src="src\Styles\img\logo2.png" alt="logo"/>
+                            <img src="assets\img\logo2.png" alt="logo"/>
                         </div>
                         <form action="index.html" className="login-form" onSubmit={clickHandler}>
                             <div className="form-group">
