@@ -4,11 +4,13 @@ import {setAlert} from '../actions/alert';
 import { setLogin } from '../actions/login';
 import axios from "axios";
 import PropTypes from 'prop-types';
+
+// import 'logo2.png' from 'public/assets/img'
 // import ForgotPassword from './ForgotPassword'
 
 const Login = (props) => {
-    localStorage.removeItem("username")
-    localStorage.removeItem("password")
+// localStorage.removeItem("username")
+// localStorage.removeItem("password")
     var [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -46,9 +48,9 @@ const Login = (props) => {
             props.setAlert("Logged in", "success");
             console.log(res.data)
         } catch (err) {
-
-            props.setAlert("Log in failed", "danger");
-            // console.log(err.response.data);
+            if(err.response.data.detail === 'No active account found with the given credentials')
+                props.setAlert('username or password is incorrect', "danger");
+            console.log(err.response.data);
 
         }
     };
@@ -80,7 +82,7 @@ const Login = (props) => {
                 <div className="login-page-content">
                     <div className="login-box">
                         <div className="item-logo">
-                            <img src="src\Styles\img\logo2.png" alt="logo"/>
+                            <img src={'public/assets/img/logo2.png'}/>
                         </div>
                         <form action="index.html" className="login-form" onSubmit={clickHandler}>
                             <div className="form-group">
