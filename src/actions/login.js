@@ -1,11 +1,10 @@
-import { SET_CREDENTIALS_LOGIN } from "./types";
+import { LOGIN_SUCCESS, LOGIN_FAIL } from "./types";
 
-export const setLogin = (username, password) => (dispatch) => {
+export const setLogin = (token) => (dispatch) => {
     dispatch({
-        type: SET_CREDENTIALS_LOGIN,
+        type: LOGIN_SUCCESS,
         payload: {
-            username,
-            password
+            token
         }
     });
 }

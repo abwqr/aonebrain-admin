@@ -1,11 +1,14 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux';
-import {setAlert} from '../actions/alert';
-// import logo2 from '../../public/img/logo2.png';
+import {setAlert} from '../../actions/alert';
 import axios from "axios";
 import PropTypes from 'prop-types'
+import { signupApi } from '../../APIs/auth';
+import { registerSuccess, registerFail } from '../../actions/register';
+// import PropTypes from 'prop-types';
 
-const SignUp = (props) => {
+
+const SignUp = ({registerSuccess, registerFail, setAlert}) => {
 
     function hasNumber(myString) {
         return /\d/.test(myString);
@@ -29,7 +32,7 @@ const SignUp = (props) => {
         {
             if(password1 !== password2)
             {
-                props.setAlert("Passwords do not match", "danger")
+                setAlert("Passwords do not match", "danger")
 
             }
 
@@ -42,12 +45,14 @@ const SignUp = (props) => {
                 };
                 const body = JSON.stringify(formData);
                 console.log(body)
-                const res = await axios.post('http://aonebrain.aim-less.com/api/registration/', body, config);
-                props.setAlert("Sign up successful", "success");
-                console.log(res.data)
+                const res = await axios.post(signupApi, body, config);
+                setAlert("Sign up successful", "success");
+                
+                registerSuccess(res.data.key);
+                console.log(res.data.key)
 
                 } catch (err) {
-
+                    registerFail()
                     const error = {email: 'A user is already registered with this e-mail address.',
                                    username: 'A user with that username already exists.',
                                    status: '400' 
@@ -58,30 +63,23 @@ const SignUp = (props) => {
                     const errorReturned = err.response.data
 
 
-                    console.log((JSON.stringify(Object.values(errorReturned)[2])))
+                    console.log(Object.values(errorReturned)[3])
                     
                     if(JSON.stringify(JSON.stringify(Object.values(errorReturned)[2])) === JSON.stringify(error.status)){
                       
-                        if((JSON.stringify(Object.values(errorReturned)[1][0]) === JSON.stringify(error.email)))
-                        {
-                            // console.log(typeof(JSON.stringify(err.response.data)))
-                            props.setAlert('A user is already registered with this e-mail address.', "danger");
-                        }
-                       
-                    if(JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.username))
-                        props.setAlert('A user with that username already exists.', "danger");  
+                            setAlert(Object.values(errorReturned)[0][0], "danger");
+                            setAlert(Object.values(errorReturned)[1][0], "danger");
                     }
                     
                     else if(JSON.stringify(JSON.stringify(Object.values(errorReturned)[1])) === JSON.stringify(error.status)){
                       
-                        if((JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.email)))
-                        {
-                            // console.log(typeof(JSON.stringify(err.response.data)))
-                            props.setAlert('A user is already registered with this e-mail address.', "danger");
-                        }
-                       
-                    if(JSON.stringify(Object.values(errorReturned)[0][0]) === JSON.stringify(error.username))
-                        props.setAlert('A user with that username already exists.', "danger");  
+                        setAlert(Object.values(errorReturned)[0][0], "danger");
+                    }
+
+                    else if(JSON.stringify(JSON.stringify(Object.values(errorReturned)[3])) === JSON.stringify(error.status)){
+                        setAlert(Object.values(errorReturned)[0][0], "danger");
+                        setAlert(Object.values(errorReturned)[1][0], "danger");
+                        setAlert(Object.values(errorReturned)[2][0], "danger");
                     }
 
                     
@@ -92,9 +90,9 @@ const SignUp = (props) => {
         else
         {
             
-            if (!isNaN(password1)) props.setAlert("Password should contain an alphabet", "danger") 
-            if (!hasNumber(password1))  props.setAlert("Password should contain a number", "danger")
-            if (password1.length < 8) props.setAlert("Password length should have at least 8 characters", "danger")
+            if (!isNaN(password1)) setAlert("Password should contain an alphabet", "danger") 
+            if (!hasNumber(password1))  setAlert("Password should contain a number", "danger")
+            if (password1.length < 8) setAlert("Password length should have at least 8 characters", "danger")
         }
 
         
@@ -107,9 +105,9 @@ const SignUp = (props) => {
           console.log(e.target.value)
     };
 
-    SignUp.propTypes = {
-        setAlert: PropTypes.func.isRequired
-    }
+    
+ 
+
 
     return(
         <>
@@ -118,7 +116,7 @@ const SignUp = (props) => {
                 <div className="login-page-content">
                     <div className="login-box">
                         <div className="item-logo"> 
-                            <img src="src/img/logo2.png" alt="logo"/>
+                            <img src="assets\img\logo2.png" alt="logo"/>
                         </div>
                         <form action="index.html" className="login-form"  onSubmit={clickHandler}>
                      
@@ -163,8 +161,16 @@ const SignUp = (props) => {
             </div>
         </>
     )
-
-
-    
 }
-export default connect(null, {setAlert}) (SignUp);
+SignUp.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    registerSuccess: PropTypes.func.isRequired,
+    registerFail: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+}
+const mapStateToProps = state => (
+    {
+        isAuthenticated: state.isAuthenticated
+    }
+);
+export default connect(mapStateToProps, {setAlert, registerSuccess, registerFail}) (SignUp);

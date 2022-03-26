@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux';
-import {setAlert} from '../actions/alert';
+import { setAlert } from '../../actions/alert';
 import axios from "axios";
 import PropTypes from 'prop-types'
+import { forgotpassword } from '../../APIs/auth';
 
 const ForgotPassword = (props) => {
 
@@ -25,9 +26,7 @@ const ForgotPassword = (props) => {
                 }
             };
             const body = JSON.stringify(formData);
-            const res = await axios.post('http://aonebrain.aim-less.com/api/password/reset/', body, config);
-            // const res = await axios.post('https://jsonplaceholder.typicode.com/users', body);
-            
+            const res = await axios.post(forgotpassword, body, config);
             props.setAlert('Password reset e-mail has been sent.', "success");
             console.log(res.data)
         } catch (err) {
@@ -58,7 +57,7 @@ const ForgotPassword = (props) => {
                 <div className="login-page-content">
                     <div className="login-box">
                         <div className="item-logo">
-                            <img src="src\Styles\img\logo2.png" alt="logo"/>
+                            <img src="assets\img\logo2.png" alt="logo"/>
                         </div>
                         <form action="index.html" className="login-form" onSubmit={clickHandler}>
                             <div className="form-group">

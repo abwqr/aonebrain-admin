@@ -1,16 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import { Navigate } from "react-router-dom";
 import {connect} from 'react-redux';
-import {setAlert} from '../actions/alert';
-import { setLogin } from '../actions/login';
+import {setAlert} from '../../actions/alert';
+import { loginSuccess, loginFail } from '../../actions/register';
+import { setLogin } from '../../actions/login';
 import axios from "axios";
 import PropTypes from 'prop-types';
+import { loginApi } from '../../APIs/auth';
+import store from '../../store';
 
-// import 'logo2.png' from 'public/assets/img'
-// import ForgotPassword from './ForgotPassword'
 
-const Login = (props) => {
-// localStorage.removeItem("username")
-// localStorage.removeItem("password")
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
+const Login = ({setAlert, loginSuccess, loginFail, isAuthenticated}) => {
+
     var [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -22,6 +26,7 @@ const Login = (props) => {
 
     const clickHandler = async e => {
         e.preventDefault()
+        // toast("Login")
         if(rememberme)
         {
             const usernameStorage = localStorage.getItem('username')
@@ -42,15 +47,18 @@ const Login = (props) => {
                 }
             };
             const body = JSON.stringify(formData);
-            const res = await axios.post('http://aonebrain.aim-less.com/api/token/', body, config);
-            // const res = await axios.post('https://jsonplaceholder.typicode.com/users', body);
+            const res = await axios.post(loginApi, body, config);
 
-            props.setAlert("Logged in", "success");
-            console.log(res.data)
+            setAlert("Logged in", "success");
+            loginSuccess(res.data.access)
+            console.log(store.getState().register.isAuthenticated)
+            
         } catch (err) {
-            if(err.response.data.detail === 'No active account found with the given credentials')
-                props.setAlert('username or password is incorrect', "danger");
-            console.log(err.response.data);
+            loginFail()
+            const errorReturned = err.response.data
+            if(errorReturned.detail === 'No active account found with the given credentials')
+            setAlert('username or password is incorrect', "danger");
+            console.log(errorReturned);
 
         }
     };
@@ -68,9 +76,10 @@ const Login = (props) => {
         else
             setRememberme(false)
     }
-
-    Login.propTypes = {
-        setAlert: PropTypes.func.isRequired
+    
+    if(isAuthenticated == true){
+        console.log("Auth")
+       return <Navigate to = "/dashboard" replace={true} />
     }
 
 
@@ -82,7 +91,7 @@ const Login = (props) => {
                 <div className="login-page-content">
                     <div className="login-box">
                         <div className="item-logo">
-                            <img src={'public/assets/img/logo2.png'}/>
+                            <img src="assets\img\logo2.png" alt="logo"/>
                         </div>
                         <form action="index.html" className="login-form" onSubmit={clickHandler}>
                             <div className="form-group">
@@ -123,9 +132,20 @@ const Login = (props) => {
                 </div>
             </div>
         </>
-    )
-
- 
-    
+    )    
 }
-export default connect(null, {setAlert, setLogin}) (Login);
+
+Login.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    loginSuccess: PropTypes.func.isRequired,
+    loginFail: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps = state => ({
+    isAuthenticated: store.getState().register.isAuthenticated
+})
+
+
+
+export default connect(mapStateToProps, {setAlert, loginSuccess, loginFail}) (Login);

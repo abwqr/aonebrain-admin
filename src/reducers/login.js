@@ -1,17 +1,19 @@
-import { SET_CREDENTIALS_LOGIN } from "../actions/types";
+// import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
 
-const intialState = [];
+// const intialState = {
 
-export default function(state = intialState, action){
-    switch(action.type){
-        case SET_CREDENTIALS_LOGIN:
-            return [...state, action.payload]
+// };
+
+// export default function(state = intialState, action){
+//     switch(action.type){
+//         case SET_CREDENTIALS_LOGIN:
+//             return [...state, action.payload]
         
-            default:
-                return state;
-    }
+//             default:
+//                 return state;
+//     }
         
 
 
 
-}
+// }
