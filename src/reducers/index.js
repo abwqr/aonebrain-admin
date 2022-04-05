@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import alert from "./alert";
-import login from "./login";
 import register from "./register";
+import career from "./career";
 export default combineReducers({
     alert,
-    login,
-    register
+    register,
+    career
     
 })

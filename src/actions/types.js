@@ -5,3 +5,7 @@ export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const JOB_DATA_FETCHED = 'JOB_DATA_FETCHED';
+export const JOB_NOT_DATA_FETCHED = 'JOB_NOT_DATA_FETCHED';
+export const JOB_LISTING = 'JOB_LISTING';
+export const UPDATE_JOB = 'UPDATE_JOB'

@@ -3,16 +3,12 @@ import { Navigate } from "react-router-dom";
 import {connect} from 'react-redux';
 import {setAlert} from '../../actions/alert';
 import { loginSuccess, loginFail } from '../../actions/register';
-import { setLogin } from '../../actions/login';
 import axios from "axios";
 import PropTypes from 'prop-types';
 import { loginApi } from '../../APIs/auth';
 import store from '../../store';
 
 
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-toast.configure()
 const Login = ({setAlert, loginSuccess, loginFail, isAuthenticated}) => {
 
     var [formData, setFormData] = useState({
@@ -79,7 +75,7 @@ const Login = ({setAlert, loginSuccess, loginFail, isAuthenticated}) => {
     
     if(isAuthenticated == true){
         console.log("Auth")
-       return <Navigate to = "/dashboard" replace={true} />
+       return <Navigate to = "../postjobs" replace={true} />
     }
 
 
